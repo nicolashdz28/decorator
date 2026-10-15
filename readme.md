@@ -205,9 +205,15 @@ Ejecuta `Main` y verifica que:
 #### Preguntas de Análisis:
 
 - ¿Qué responsabilidad añade `SuscripcionDecorator` al catálogo que envuelve?
+R= Sirve como control de acceso, si el usuario no tiene suscripción se le niega el acceso, mientras que el otro no pregunta eso, solo proporciona.
 - ¿Por qué `CatalogoDecorator` guarda una referencia de tipo `CatalogoPeliculas` y no de una clase concreta?
+R=Porque el decorador puede envolver a cualquier objeto que cumpla la interfaz, así se reduce el acoplamiento y se permite apilar varias capas.
 - ¿Qué ventaja tiene comprobar la suscripción al consultar el catálogo, en vez de generar una clase para cada combinación de suscripciones?
+R=Evita la explosión de clases. Con tres servicios habría que crear una clase por cada combinación posible de suscripciones al comprobar en tiempo de ejecución, basta con una sola clase SuscripcionDecorator, y el resultado depende del estado actual del Usuario. Por eso, activar o cancelar una suscripción cambia el acceso sin reemplazar el catálogo ni crear otra subclase.
 - ¿Qué cambiarías si un usuario pudiera acceder a varios catálogos con una única suscripción de paquete?
+R=Agregar a ServicioStreaming o a una nueva clase Paquete la lista de servicios que incluye, por ejemplo PAQUETE_TOTAL que cubra Disney, Paramount y Warner.
+Modificar Usuario.tieneSuscripcion(servicio) para que devuelva true si el usuario tiene el servicio directamente o tiene algún paquete que lo incluya.
+Dejar SuscripcionDecorator y los catálogos intactos, ya que el decorador solo pregunta usuario.tieneSuscripcion(servicio) y no le importa cómo se resuelve esa respuesta.
 
 ## Diagrama de clases
 
